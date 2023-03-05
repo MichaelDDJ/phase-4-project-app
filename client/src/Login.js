@@ -1,13 +1,13 @@
 import React, {useContext} from "react"
 import { useNavigate } from "react-router-dom"
-import { Context } from "./App"
+import { UserContext, EmailContext, PasswordContext } from "./App"
+import SignUp from "./SignUp";
 
 function Login() {
-    const [email, setEmail] = useContext(Context)
-    const [password, setPassword] = useContext(Context)
-    const [currentUser, setCurrentUser] = useContext(Context)
 
-    const navigate = useNavigate();
+    const [currentUser, setCurrentUser] = useContext(UserContext)
+    const [email, setEmail] = useContext(EmailContext)
+    const [password, setPassword] = useContext(PasswordContext)
 
 
     function handleEmailChange(event) {
@@ -31,16 +31,11 @@ function Login() {
         })
         .then(res => {
             if(res.ok){
-                res.json().then(setCurrentUser)
-                navigate("/Home")
+                res.json().then(user => setCurrentUser(user))
             }else{
                 res.json().then(console.log("login error"))
             }
         })
-    }
-
-    function handleSendToSignUp() {
-        navigate("/SignUp")
     }
 
 
@@ -50,9 +45,8 @@ function Login() {
         <form onSubmit={handleSubmit}>
             <input type="text" placeholder="Email" onChange={handleEmailChange} value={email}/>
             <input type="text" placeholder="Password" onChange={handlePasswordChange} value={password}/>
-            <button>Sign Up</button>    
+            <button>Login</button>    
         </form>
-        <button onClick={handleSendToSignUp}>Go to Sign Up</button>
         </>
     )
 }
