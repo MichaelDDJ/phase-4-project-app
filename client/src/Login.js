@@ -38,6 +38,20 @@ function Login() {
         })
     }
 
+    function handleLogout () {
+        fetch("/logout", { method: "DELETE" }).then((r) => {
+            if (r.ok) {
+              setCurrentUser(null);
+            }
+        });
+    }
+
+    if (currentUser) {
+        return (
+            <button onClick={handleLogout}>Logout</button>
+        )
+    }
+
 
     return (
         <>
