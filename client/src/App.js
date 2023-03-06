@@ -2,7 +2,7 @@ import './App.css';
 import React, {useEffect, useState, createContext} from 'react';
 import { Routes, Route, NavLink, useNavigate} from 'react-router-dom';
 import Home from './Home';
-import Bookings from './Bookings';
+import Reviews from './Reviews';
 import Login from './Login';
 import Profile from './Profile';
 import SignUp from './SignUp';
@@ -12,6 +12,7 @@ export const LastNameContext = createContext();
 export const EmailContext = createContext();
 export const PasswordContext = createContext();
 export const UserContext = createContext();
+export const HotelContext = createContext();
 
 function App() {
   const [currentUser, setCurrentUser] = useState("")
@@ -19,6 +20,7 @@ function App() {
   const [last_name, setLastName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [hotels, setHotels] = useState([])
   
 
   const navigate = useNavigate();
@@ -28,11 +30,17 @@ function App() {
     .then(r => {
       if(r.ok) {
         r.json().then(user => setCurrentUser(user))
-        navigate("/Home")
+        navigate("/")
       }else {
         navigate("/Login")
       }
     })
+  },[])
+
+  useEffect(() => {
+    fetch('/hotels')
+    .then(r => r.json())
+    .then(hotels => setHotels(hotels))
   },[])
 
 
@@ -42,23 +50,26 @@ function App() {
         <EmailContext.Provider value={[email, setEmail]}>
           <PasswordContext.Provider value={[password, setPassword]}>
             <UserContext.Provider value={[currentUser,setCurrentUser]}>
-              <div className="App">
-                  <nav className='nav'>
-                    <h1>{currentUser ? `Title, Hi ${currentUser.first_name}`: "Please login"}</h1>
-                    <NavLink to="/">Home</NavLink>
-                    <NavLink to="Profile">My Profile</NavLink>
-                    <NavLink to="Bookings">My Bookings</NavLink>
-                    <NavLink to="Login">Login</NavLink>
-                    <NavLink to="SignUp">SignUp</NavLink>
-                  </nav>
-                  <Routes>
-                    <Route index element={<Home />} />
-                    <Route path="/Profile" element={<Profile />} />
-                    <Route path="/Bookings" element={<Bookings />} />
-                    <Route path="/Login" element={<Login />} />
-                    <Route path="/SignUp" element={<SignUp />} />
-                  </Routes>
-              </div>
+              <HotelContext.Provider value={[hotels, setHotels]}>
+                <div className="App">
+                    <nav className='nav'>
+                      <h1>{currentUser ? `Title, Hi ${currentUser.first_name}`: "Please login"}</h1>
+                      <NavLink to="/">Home</NavLink>
+                      <NavLink to="Profile">My Profile</NavLink>
+                      <NavLink to="Reviews">My Reviews</NavLink>
+                      <NavLink to="Login">Login</NavLink>
+                      <NavLink to="SignUp">SignUp</NavLink>
+                    </nav>
+                    
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/Profile" element={<Profile />} />
+                      <Route path="/Reviews" element={<Reviews />} />
+                      <Route path="/Login" element={<Login />} />
+                      <Route path="/SignUp" element={<SignUp />} />
+                    </Routes>
+                </div>
+              </HotelContext.Provider>
             </UserContext.Provider>
           </PasswordContext.Provider>
         </EmailContext.Provider>
