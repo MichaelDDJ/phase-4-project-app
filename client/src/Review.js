@@ -1,11 +1,18 @@
-import React, {useState} from "react"
+import React, {useState, useEffect} from "react"
 import { useNavigate } from "react-router-dom"
 import { useContext } from "react"
 import { UserContext, HotelContext, ErrorsContext } from "./App"
 
 function Review({hotel_id}) {
 
+    useEffect(() => {
+        fetch('/user_reviews')
+        .then(r => r.json())
+        .then(userReviews => setReviews(userReviews))
+      },[])
+
     const [review, setReview] = useState("")
+    const [reviews, setReviews] = useState([])
     const [currentUser, setCurrentUser] = useContext(UserContext)
     const [hotels, setHotels] = useContext(HotelContext)
     const [errors, setErrors] = useContext(ErrorsContext)
@@ -17,6 +24,7 @@ function Review({hotel_id}) {
 
 
     function handleSubmit(e) {
+
 
         e.preventDefault()
         if(currentUser) {
@@ -33,8 +41,7 @@ function Review({hotel_id}) {
             })
             .then(r => {
             if(r.ok) {
-                r.json().then(review => console.log(review))
-                navigate("/")
+                r.json().then(review => setReviews([...reviews, review].flat()))
             }else {
                 r.json().then((errorMessage) => setErrors(errorMessage))
             }

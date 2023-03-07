@@ -10,5 +10,5 @@ class ReviewsController < ApplicationController
         params.permit(:review, :user_id, :hotel_id)
     end
 
-    
+
 end

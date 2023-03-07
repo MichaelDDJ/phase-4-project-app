@@ -30,6 +30,12 @@ class UsersController < ApplicationController
         end
     end
 
+    def show_reviews
+        user = User.find(session[:user_id])
+        reviews = user.reviews
+        render json: reviews, status: :ok
+    end
+
     private
 
     def render_not_found

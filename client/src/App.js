@@ -56,7 +56,7 @@ function App() {
                 <ErrorsContext.Provider value={[errors, setErrors]}>
                   <div className="App">
                       <nav className='nav'>
-                        <h1>{currentUser ? `Title, Hi ${currentUser.first_name}`: "Please login"}</h1>
+                        <h1>{currentUser ? `Hotel Reviews, Hi ${currentUser.first_name}`: "Please login"}</h1>
                         <NavLink to="/">Home</NavLink>
                         <NavLink to="Profile">My Profile</NavLink>
                         <NavLink to="Reviews">My Reviews</NavLink>

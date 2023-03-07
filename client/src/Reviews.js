@@ -4,7 +4,7 @@ import { useContext } from "react";
 function Reviews() { 
 
     const [currentUser, setCurrentUser] = useContext(UserContext)
-
+    
     
     if(currentUser){
         const displayedReviews = currentUser.reviews.map((review) => {
