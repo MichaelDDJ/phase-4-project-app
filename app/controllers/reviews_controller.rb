@@ -1,12 +1,14 @@
 class ReviewsController < ApplicationController
     def create
-        review = User.create!(review_params)
-        render json: review, status: :ok
+        review = Review.create!(review_params)
+        render json: review, include: :hotel, status: :ok
     end
 
     private
 
     def review_params
-        params.permit(:review)
+        params.permit(:review, :user_id, :hotel_id)
     end
+
+    
 end

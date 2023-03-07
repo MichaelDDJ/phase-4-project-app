@@ -1,6 +1,6 @@
 import React, {useContext} from "react"
 import { useNavigate } from "react-router-dom"
-import { UserContext, EmailContext, PasswordContext } from "./App"
+import { UserContext, EmailContext, PasswordContext, ErrorsContext } from "./App"
 import SignUp from "./SignUp";
 
 function Login() {
@@ -8,6 +8,7 @@ function Login() {
     const [currentUser, setCurrentUser] = useContext(UserContext)
     const [email, setEmail] = useContext(EmailContext)
     const [password, setPassword] = useContext(PasswordContext)
+    const [errors, setErrors] = useContext(ErrorsContext)
 
 
     function handleEmailChange(event) {
@@ -32,6 +33,7 @@ function Login() {
         .then(res => {
             if(res.ok){
                 res.json().then(user => setCurrentUser(user))
+                setErrors("")
             }else{
                 res.json().then(console.log("login error"))
             }
@@ -42,8 +44,10 @@ function Login() {
         fetch("/logout", { method: "DELETE" }).then((r) => {
             if (r.ok) {
               setCurrentUser(null);
+              
             }
         });
+        setErrors("Must be logged in to review.")
     }
 
     if (currentUser) {

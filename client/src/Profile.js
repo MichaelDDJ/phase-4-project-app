@@ -1,10 +1,11 @@
 import React, {useContext} from "react";
-import { UserContext, FirstNameContext, LastNameContext } from "./App";
+import { UserContext, FirstNameContext, LastNameContext, ErrorsContext } from "./App";
 
 function Profile() {
     const [currentUser, setCurrentUser] = useContext(UserContext)
     const [first_name, setFirstName] = useContext(FirstNameContext)
     const [last_name, setLastName] = useContext(LastNameContext)
+    const [errors, setErrors] = useContext(ErrorsContext)
 
 
     function handleSubmit(event) {
@@ -13,8 +14,7 @@ function Profile() {
             first_name,
             last_name
         }
-        console.log(newUser)
-        console.log(currentUser)
+        if(!currentUser) return (<h3>Must first login.</h3>)
         fetch(`/users/${currentUser.id}`,{
             method: "PATCH",
             headers:{'Content-Type':'application/json'},
@@ -24,7 +24,7 @@ function Profile() {
             if(res.ok){
                 res.json().then(user => setCurrentUser(user))
             }else{
-                res.json().then(console.log("Edit error"))
+                res.json().then(errors => setErrors(errors.error))
             }
         })
     }
@@ -38,17 +38,23 @@ function Profile() {
 
     }
 
-    return (
-        <div>
-            <h1>Profile Page</h1>
-            <form id="Profile" onSubmit={handleSubmit}>
-                <input type="text" placeholder="First Name" onChange={(event) => setFirstName(event.target.value)} value={first_name}/>
-                <input type="text" placeholder="Last Name" onChange={(event) => setLastName(event.target.value)} value={last_name}/>
-                <button>Apply Changes</button>    
-            </form>
-        <button onClick={handleDelete}>Delete Profile</button>
-        </div>
-    );
+    if(currentUser) {
+        return (
+            <div>
+                <h1>Profile Page</h1>
+                <h2>First Name: {currentUser.first_name}</h2>
+                <h2>Last Name: {currentUser.last_name}</h2>
+                <form id="Profile" onSubmit={handleSubmit}>
+                    <input type="text" placeholder="First Name" onChange={(event) => setFirstName(event.target.value)} value={first_name}/>
+                    <input type="text" placeholder="Last Name" onChange={(event) => setLastName(event.target.value)} value={last_name}/>
+                    <button>Apply Changes</button>    
+                </form>
+            <button onClick={handleDelete}>Delete Profile</button>
+            </div>
+        );
+    }else {
+        return <h1>Please go to Login</h1>
+    }
 }
 
 export default Profile;

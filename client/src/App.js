@@ -13,6 +13,7 @@ export const EmailContext = createContext();
 export const PasswordContext = createContext();
 export const UserContext = createContext();
 export const HotelContext = createContext();
+export const ErrorsContext = createContext();
 
 function App() {
   const [currentUser, setCurrentUser] = useState("")
@@ -21,6 +22,7 @@ function App() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [hotels, setHotels] = useState([])
+  const [errors, setErrors] = useState("")
   
 
   const navigate = useNavigate();
@@ -32,7 +34,7 @@ function App() {
         r.json().then(user => setCurrentUser(user))
         navigate("/")
       }else {
-        navigate("/Login")
+        r.json().then((errorMessage) => setErrors(errorMessage))
       }
     })
   },[])
@@ -51,24 +53,26 @@ function App() {
           <PasswordContext.Provider value={[password, setPassword]}>
             <UserContext.Provider value={[currentUser,setCurrentUser]}>
               <HotelContext.Provider value={[hotels, setHotels]}>
-                <div className="App">
-                    <nav className='nav'>
-                      <h1>{currentUser ? `Title, Hi ${currentUser.first_name}`: "Please login"}</h1>
-                      <NavLink to="/">Home</NavLink>
-                      <NavLink to="Profile">My Profile</NavLink>
-                      <NavLink to="Reviews">My Reviews</NavLink>
-                      <NavLink to="Login">Login</NavLink>
-                      <NavLink to="SignUp">SignUp</NavLink>
-                    </nav>
-                    
-                    <Routes>
-                      <Route path="/" element={<Home />} />
-                      <Route path="/Profile" element={<Profile />} />
-                      <Route path="/Reviews" element={<Reviews />} />
-                      <Route path="/Login" element={<Login />} />
-                      <Route path="/SignUp" element={<SignUp />} />
-                    </Routes>
-                </div>
+                <ErrorsContext.Provider value={[errors, setErrors]}>
+                  <div className="App">
+                      <nav className='nav'>
+                        <h1>{currentUser ? `Title, Hi ${currentUser.first_name}`: "Please login"}</h1>
+                        <NavLink to="/">Home</NavLink>
+                        <NavLink to="Profile">My Profile</NavLink>
+                        <NavLink to="Reviews">My Reviews</NavLink>
+                        <NavLink to="Login">Login</NavLink>
+                        <NavLink to="SignUp">SignUp</NavLink>
+                      </nav>
+                      <p className='error'>{errors.error}</p>
+                      <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/Profile" element={<Profile />} />
+                        <Route path="/Reviews" element={<Reviews />} />
+                        <Route path="/Login" element={<Login />} />
+                        <Route path="/SignUp" element={<SignUp />} />
+                      </Routes>
+                  </div>
+                </ErrorsContext.Provider>
               </HotelContext.Provider>
             </UserContext.Provider>
           </PasswordContext.Provider>

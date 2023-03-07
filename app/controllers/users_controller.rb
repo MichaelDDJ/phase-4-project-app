@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
     wrap_parameters format: []
     rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity
+    rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
 
     skip_before_action :authorized, only: [:create, :show, :destroy]
     def create
@@ -10,7 +11,7 @@ class UsersController < ApplicationController
 
     def show
         user = User.find(session[:user_id])
-        render json: user
+        render json: user, include: :reviews
     end
 
     def update
@@ -30,6 +31,10 @@ class UsersController < ApplicationController
     end
 
     private
+
+    def render_not_found
+        render json:{error: "Couldn't verify user. Please login."}, status: :not_found
+    end
 
     def render_unprocessable_entity(invalid)
         render json:{error: invalid.record.errors}, status: :unprocessable_entity
