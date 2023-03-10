@@ -2,5 +2,5 @@ class Review < ApplicationRecord
     belongs_to :user
     belongs_to :hotel
 
-    validates :review, uniqueness: true
+    validates :review, length: {minimum: 2}
 end

@@ -7,6 +7,8 @@ class UsersController < ApplicationController
     def create
         user = User.create!(user_params)
         render json: user, status: :ok
+    #rescue ActiveRecord::RecordInvalid
+        #render_create_user_errors
     end
 
     def show
@@ -30,11 +32,7 @@ class UsersController < ApplicationController
         end
     end
 
-    def show_reviews
-        user = User.find(session[:user_id])
-        reviews = user.reviews
-        render json: reviews, status: :ok
-    end
+    
 
     private
 
@@ -48,5 +46,9 @@ class UsersController < ApplicationController
 
     def user_params
         params.permit(:first_name, :last_name, :password, :email)
-    end 
+    end
+
+    def render_create_user_errors
+        render json: {error: "Cannot leave fields blank."}, status: :unprocessable_entity
+    end
 end

@@ -1,5 +1,5 @@
 import { useState, useContext } from "react"
-import { HotelContext, UserContext } from "./App"
+import { HotelContext } from "./App"
 
 
 function HotelForm () {
@@ -7,7 +7,7 @@ function HotelForm () {
     const [name, setHotelName] = useState("")
     const [address, setHotelAddress] = useState("")
     const [hotels, setHotels] = useContext(HotelContext)
-    const [currentUser, setCurrentUser] = useContext(UserContext)
+    const [errors, setErrors] = useState([])
 
     function handleHotelChange (event) {
         setHotelName(event.target.value)
@@ -15,6 +15,12 @@ function HotelForm () {
 
     function handleAddressChange (event) {
         setHotelAddress(event.target.value)
+    }
+
+    function AddHotel(hotel) {
+        const newHotel = hotel
+        newHotel.reviews = []
+        setHotels([...hotels, newHotel])
     }
 
     function handleHotelSubmit (event) {
@@ -31,21 +37,22 @@ function HotelForm () {
         })
         .then(res => {
             if(res.ok){
-                res.json().then(hotel => setHotels([...hotels, hotel].flat()))
+                res.json().then(hotel => AddHotel(hotel))
             }else{
-                res.json().then(console.log("Hotel error"))
+                res.json().then(error => setErrors(error.error))
             }
         })
     }
 
-    if(!currentUser) return <></>
-
     return (
+        <>
+        {errors == [] ? <></> : <p className="error">{Object.keys(errors)[0]} {errors[Object.keys(errors)[0]]}</p>}
         <form onSubmit={handleHotelSubmit}>
             <input type="text" placeholder="Hotel" onChange={handleHotelChange} value={name}/>
             <input type="text" placeholder="Address" onChange={handleAddressChange} value={address}/>
             <button>Add Hotel</button>
         </form>
+        </>
     )
 }
 

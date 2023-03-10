@@ -1,14 +1,12 @@
-import React, {useContext} from "react"
-import { useNavigate } from "react-router-dom"
-import { UserContext, EmailContext, PasswordContext, ErrorsContext } from "./App"
-import SignUp from "./SignUp";
+import React, { useState} from "react"
 
-function Login() {
+//set errors
 
-    const [currentUser, setCurrentUser] = useContext(UserContext)
-    const [email, setEmail] = useContext(EmailContext)
-    const [password, setPassword] = useContext(PasswordContext)
-    const [errors, setErrors] = useContext(ErrorsContext)
+function Login({setCurrentUser}) {
+
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [errors, setErrors] = useState([])
 
 
     function handleEmailChange(event) {
@@ -33,33 +31,17 @@ function Login() {
         .then(res => {
             if(res.ok){
                 res.json().then(user => setCurrentUser(user))
-                setErrors("")
+                setErrors([])
             }else{
-                res.json().then(console.log("login error"))
+                res.json().then(error => setErrors(error))
             }
         })
     }
 
-    function handleLogout () {
-        fetch("/logout", { method: "DELETE" }).then((r) => {
-            if (r.ok) {
-              setCurrentUser(null);
-              
-            }
-        });
-        setErrors("Must be logged in to review.")
-    }
-
-    if (currentUser) {
-        return (
-            <button onClick={handleLogout}>Logout</button>
-        )
-    }
-
-
     return (
         <>
         <h1>Login Page</h1>
+        {errors == [] ? <></> : <p className="error">{errors[Object.keys(errors)[0]]}</p>}
         <form onSubmit={handleSubmit}>
             <input type="text" placeholder="Email" onChange={handleEmailChange} value={email}/>
             <input type="text" placeholder="Password" onChange={handlePasswordChange} value={password}/>

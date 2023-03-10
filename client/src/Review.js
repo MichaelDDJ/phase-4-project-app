@@ -1,25 +1,34 @@
 import React, {useState, useEffect} from "react"
-import { useNavigate } from "react-router-dom"
 import { useContext } from "react"
-import { UserContext, HotelContext, ErrorsContext } from "./App"
+import { UserContext, HotelContext } from "./App"
 
 function Review({hotel_id}) {
 
-    useEffect(() => {
-        fetch('/user_reviews')
-        .then(r => r.json())
-        .then(userReviews => setReviews(userReviews))
-      },[])
-
     const [review, setReview] = useState("")
-    const [reviews, setReviews] = useState([])
     const [currentUser, setCurrentUser] = useContext(UserContext)
     const [hotels, setHotels] = useContext(HotelContext)
-    const [errors, setErrors] = useContext(ErrorsContext)
-    const navigate = useNavigate()
+    const [errors, setErrors] = useState([])
+    
 
     function handleReviewChange(event) {
         setReview(event.target.value)
+    }
+
+    function AddReview (review) {
+        const newReviews = [...currentUser.reviews, review]
+        currentUser.reviews = newReviews
+        setCurrentUser(currentUser)
+
+        const newHotels = hotels.map((hotel => {
+            if (hotel.id == hotel_id){
+                const newReviews = [...hotel.reviews, review]
+                hotel.reviews = newReviews
+                return hotel
+            }else{
+                return hotel
+            }
+        }))
+        setHotels(newHotels)
     }
 
 
@@ -27,33 +36,33 @@ function Review({hotel_id}) {
 
 
         e.preventDefault()
-        if(currentUser) {
-            const user_id = currentUser.id
-            const content = {
-                review,
-                user_id,
-                hotel_id
-            }
-            fetch('/reviews',{
-                method: 'POST',
-                headers: {'Content-Type':'application/json'},
-                body: JSON.stringify(content)
-            })
-            .then(r => {
-            if(r.ok) {
-                r.json().then(review => setReviews([...reviews, review].flat()))
-            }else {
-                r.json().then((errorMessage) => setErrors(errorMessage))
-            }
-            })
+        const user_id = currentUser.id
+        const content = {
+            review,
+            user_id,
+            hotel_id
         }
+        fetch('/reviews',{
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify(content)
+        })
+        .then(r => {
+        if(r.ok) {
+            r.json().then(review => AddReview(review))
+        }else{
+            r.json().then(data => setErrors(data))
+        }})
     }
     
     return (
+        <>
+        {errors == [] ? <></> : <p className="error">{errors.error}</p>}
         <form onSubmit={handleSubmit} className="review">
             <input type="text" placeholder="Review" onChange={handleReviewChange} value={review}/>
             <button>Post</button>
         </form>
+        </>
     )
 }
 

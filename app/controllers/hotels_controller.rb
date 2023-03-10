@@ -1,4 +1,5 @@
 class HotelsController < ApplicationController
+    rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity
     skip_before_action :authorized, only: [:index]
     def index
         hotels = Hotel.all
@@ -14,5 +15,9 @@ class HotelsController < ApplicationController
 
     def hotel_params
         params.permit(:name, :address)
+    end
+
+    def render_unprocessable_entity(invalid)
+        render json:{error: invalid.record.errors}, status: :unprocessable_entity
     end
 end

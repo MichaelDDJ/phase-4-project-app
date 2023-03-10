@@ -7,7 +7,7 @@ function Hotel({name, address, reviewTotal, id}) {
       <div className="hotel">
         <h1>{name}</h1>
         <h2>{address}</h2>
-        <h3>{reviewTotal} Reviews</h3>
+        <h3>{reviewTotal ? reviewTotal : '0'} Reviews</h3>
         <Review hotel_id={id}/>
       </div>  
     );

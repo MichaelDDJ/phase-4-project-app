@@ -1,19 +1,13 @@
-import React, {useContext, useState} from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FirstNameContext, LastNameContext, EmailContext, PasswordContext, UserContext } from './App';
+import React, { useState} from 'react';
 
-function SignUp() {
 
-    const navigate = useNavigate(); 
-    const [currentUser, setCurrentUser] = useContext(UserContext)
-    const [first_name, setFirstName] = useContext(FirstNameContext)
-    const [last_name, setLastName] = useContext(LastNameContext)
-    const [email, setEmail] = useContext(EmailContext)
-    const [password, setPassword] = useContext(PasswordContext)
-
-    if (currentUser) {
-        return <h1>Already logged in.</h1>
-    }
+function SignUp({setCurrentUser}) {
+ 
+    const [first_name, setFirstName] = useState("")
+    const [last_name, setLastName] = useState("")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [errors, setErrors] = useState([])
 
     function handleSubmit(event) {
         event.preventDefault();
@@ -31,19 +25,21 @@ function SignUp() {
         .then(res => {
             if(res.ok){
                 res.json().then(user => setCurrentUser(user))
-                navigate("/Home")
             }else{
-                res.json().then(console.log("sign up error"))
+                res.json().then(error => setErrors(error.error))
             }
         })
 
 
         document.getElementById("SignUp").reset();
     }
-
+    
     return (
         <div>
             <h1>Sign Up Page</h1>
+            {Object.keys(errors).map((error) => {
+                return <p key={error} className='error'>{error} {errors[error][0]}</p>
+            })}
             <form id="SignUp" onSubmit={handleSubmit}>
                 <input type="text" placeholder="First Name" onChange={(event) => setFirstName(event.target.value)} value={first_name}/>
                 <input type="text" placeholder="Last Name" onChange={(event) => setLastName(event.target.value)} value={last_name}/>

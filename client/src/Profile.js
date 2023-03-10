@@ -1,20 +1,31 @@
-import React, {useContext} from "react";
-import { UserContext, FirstNameContext, LastNameContext, ErrorsContext } from "./App";
+import React, {useContext, useState} from "react";
+import { UserContext, ErrorsContext } from "./App";
+
 
 function Profile() {
-    const [currentUser, setCurrentUser] = useContext(UserContext)
-    const [first_name, setFirstName] = useContext(FirstNameContext)
-    const [last_name, setLastName] = useContext(LastNameContext)
-    const [errors, setErrors] = useContext(ErrorsContext)
+
+  const [first_name, setFirstName] = useState("")
+  const [last_name, setLastName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [currentUser, setCurrentUser] = useContext(UserContext)
+  const [errors, setErrors] = useState([])
 
 
     function handleSubmit(event) {
         event.preventDefault();
+        if(last_name == "") {
+            setLastName(currentUser.last_name)
+            console.log(last_name)
+        }
+        if(first_name == "") {
+            setFirstName(currentUser.first_name)
+            console.log(first_name)
+        }
         const newUser = {
             first_name,
             last_name
         }
-        if(!currentUser) return (<h3>Must first login.</h3>)
         fetch(`/users/${currentUser.id}`,{
             method: "PATCH",
             headers:{'Content-Type':'application/json'},
@@ -29,6 +40,14 @@ function Profile() {
         })
     }
 
+    function handleLogout () {
+        fetch("/logout", { method: "DELETE" }).then((r) => {
+            if (r.ok) {
+              setCurrentUser(null); 
+            }
+        });
+    }
+
     function handleDelete() {
         fetch("/logout", { method: "DELETE" }).then((r) => {
             if (r.ok) { 
@@ -41,6 +60,7 @@ function Profile() {
     if(currentUser) {
         return (
             <div>
+                <p className="error">{Object.keys(errors)[0]} {errors[Object.keys(errors)[0]]}</p>
                 <h1>Profile Page</h1>
                 <h2>First Name: {currentUser.first_name}</h2>
                 <h2>Last Name: {currentUser.last_name}</h2>
@@ -49,6 +69,7 @@ function Profile() {
                     <input type="text" placeholder="Last Name" onChange={(event) => setLastName(event.target.value)} value={last_name}/>
                     <button>Apply Changes</button>    
                 </form>
+                <button onClick={handleLogout}>Logout</button>
             <button onClick={handleDelete}>Delete Profile</button>
             </div>
         );
