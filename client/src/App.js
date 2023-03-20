@@ -5,16 +5,19 @@ import Home from './Home';
 import Reviews from './Reviews';
 import Profile from './Profile';
 import AuthPage from './AuthPage';
+import HotelPage from './HotelPage';
 
 export const UserContext = createContext();
 export const HotelContext = createContext();
 export const ErrorsContext = createContext();
+export const CurrentHotelContext = createContext();
 
 function App() {
   const [currentUser, setCurrentUser] = useState("")
   
   const [hotels, setHotels] = useState([])
   const [errors, setErrors] = useState([])
+  const [currentHotel, setCurrentHotel] = useState("")
   
 
   const navigate = useNavigate();
@@ -37,11 +40,14 @@ function App() {
     .then(hotels => setHotels(hotels))
   },[])
 
+
   if (!currentUser) return <AuthPage setCurrentUser={setCurrentUser} />
+  if (currentHotel) return <HotelPage currentHotel={currentHotel} setCurrentHotel={setCurrentHotel} />
   return (
             <UserContext.Provider value={[currentUser,setCurrentUser]}>
               <HotelContext.Provider value={[hotels, setHotels]}>
                 <ErrorsContext.Provider value={[errors, setErrors]}>
+                  <CurrentHotelContext.Provider value={[currentHotel, setCurrentHotel]}>
                   <div className="App">
                       <nav className='nav'>
                         <h1>Hotel Reviews, Hi {currentUser.first_name}</h1>
@@ -55,6 +61,7 @@ function App() {
                         <Route path="/Reviews" element={<Reviews />} />
                       </Routes>
                   </div>
+                  </CurrentHotelContext.Provider>
                 </ErrorsContext.Provider>
               </HotelContext.Provider>
             </UserContext.Provider>    

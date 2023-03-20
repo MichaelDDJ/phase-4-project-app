@@ -1,7 +1,10 @@
 class ReviewsController < ApplicationController
     rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity
     def create
-        review = Review.create!(review_params)
+        user = User.find(session[:user_id])
+        review = Review.new(review_params)
+        user.reviews << review
+        review.save
         render json: review, include: :hotel, status: :ok
     end
 
@@ -14,7 +17,7 @@ class ReviewsController < ApplicationController
     private
 
     def review_params
-        params.permit(:review, :user_id, :hotel_id)
+        params.permit(:review, :hotel_id)
     end
 
     def render_unprocessable_entity(invalid)

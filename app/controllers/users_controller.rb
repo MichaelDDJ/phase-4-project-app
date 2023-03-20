@@ -7,13 +7,11 @@ class UsersController < ApplicationController
     def create
         user = User.create!(user_params)
         render json: user, status: :ok
-    #rescue ActiveRecord::RecordInvalid
-        #render_create_user_errors
     end
 
     def show
         user = User.find(session[:user_id])
-        render json: user, include: :reviews
+        render json: user, include: ['reviews','reviews.hotel']
     end
 
     def update
@@ -37,11 +35,11 @@ class UsersController < ApplicationController
     private
 
     def render_not_found
-        render json:{error: "Couldn't verify user. Please login."}, status: :not_found
+        render json:{error: ["Couldn't verify user. Please login."]}, status: :not_found
     end
 
     def render_unprocessable_entity(invalid)
-        render json:{error: invalid.record.errors}, status: :unprocessable_entity
+        render json:{error: invalid.record.errors.full_messages}, status: :unprocessable_entity
     end
 
     def user_params

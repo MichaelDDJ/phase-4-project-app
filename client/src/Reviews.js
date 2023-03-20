@@ -4,21 +4,18 @@ import { useContext, useEffect } from "react";
 function Reviews() { 
 
     const [currentUser, setCurrentUser] = useContext(UserContext)
-    useEffect(() => {
-        fetch('/user_reviews')
-        .then(r => r.json())
-        .then(data => AddReviews(data))  
-    },[])
 
-    function AddReviews (userReviews) {
-        currentUser.reviews = userReviews
+    if(!currentUser.reviews){
+        currentUser.reviews = []
     }
+    console.log(currentUser.reviews)
 
     if(currentUser.reviews.length > 0){
 
         const displayedReviews = currentUser.reviews.map((review) => {
             return (
             <div className="review" key={review.id}>
+                <h2>Review for {review.hotel.name}</h2>
                 <h3>{review.review}</h3>
             </div>
             )

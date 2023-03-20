@@ -3,7 +3,7 @@ class HotelsController < ApplicationController
     skip_before_action :authorized, only: [:index]
     def index
         hotels = Hotel.all
-        render json: hotels, include: :reviews, status: :ok
+        render json: hotels, include: ['reviews', 'reviews.user'], status: :ok
     end
 
     def create

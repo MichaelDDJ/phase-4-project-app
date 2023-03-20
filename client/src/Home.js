@@ -10,7 +10,7 @@ function Home() {
 
     const displayedHotels = hotels.map((hotel) => {
         
-        return <Hotel key={hotel.id} id={hotel.id} name={hotel.name} address={hotel.address} reviewTotal={hotel.reviews.length} />
+        return <Hotel key={hotel.id} id={hotel.id} name={hotel.name} address={hotel.address} reviewTotal={hotel.reviews.length} hotel={hotel} />
     })
 
     return (

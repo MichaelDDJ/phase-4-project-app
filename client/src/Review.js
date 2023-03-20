@@ -36,10 +36,8 @@ function Review({hotel_id}) {
 
 
         e.preventDefault()
-        const user_id = currentUser.id
         const content = {
             review,
-            user_id,
             hotel_id
         }
         fetch('/reviews',{
@@ -49,6 +47,8 @@ function Review({hotel_id}) {
         })
         .then(r => {
         if(r.ok) {
+            alert("Review sent")
+            setReview("")
             r.json().then(review => AddReview(review))
         }else{
             r.json().then(data => setErrors(data))
@@ -58,7 +58,7 @@ function Review({hotel_id}) {
     return (
         <>
         {errors == [] ? <></> : <p className="error">{errors.error}</p>}
-        <form onSubmit={handleSubmit} className="review">
+        <form onSubmit={handleSubmit} className="review" id={hotel_id} >
             <input type="text" placeholder="Review" onChange={handleReviewChange} value={review}/>
             <button>Post</button>
         </form>
