@@ -1,10 +1,11 @@
+
 class ReviewsController < ApplicationController
     rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity
     def create
         user = User.find(session[:user_id])
         review = Review.new(review_params)
         user.reviews << review
-        review.save
+        review.save!
         render json: review, include: :hotel, status: :ok
     end
 
@@ -13,15 +14,25 @@ class ReviewsController < ApplicationController
         reviews = user.reviews
         render json: reviews, status: :ok
     end
+    
+    def destroy
+        review = Review.find_by(id: params[:id])
+        if review
+            review.destroy
+            render json: review, status: :ok
+        else
+            render json: { error: "Review not found" }, status: :not_found
+        end
+    end
 
     private
 
     def review_params
-        params.permit(:review, :hotel_id)
+        params.permit(:review, :hotel_id, :id)
     end
 
     def render_unprocessable_entity(invalid)
-        render json:{error: "Review cannot be blank."}, status: :unprocessable_entity
+        render json:{error: invalid.record.errors.full_messages}, status: :unprocessable_entity
     end
 
 end

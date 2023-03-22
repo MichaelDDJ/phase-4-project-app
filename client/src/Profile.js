@@ -57,10 +57,11 @@ function Profile() {
 
     }
 
+    console.log(errors)
     if(currentUser) {
         return (
             <div>
-                <p className="error">{Object.keys(errors)[0]} {errors[Object.keys(errors)[0]]}</p>
+                <p className="error">{}</p>
                 <h1>Profile Page</h1>
                 <h2>First Name: {currentUser.first_name}</h2>
                 <h2>Last Name: {currentUser.last_name}</h2>

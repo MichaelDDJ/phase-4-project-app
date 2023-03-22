@@ -3,6 +3,6 @@ class ApplicationController < ActionController::API
 
   before_action :authorized
   def authorized
-    return render json: {error: "Must first login"}, status: :unauthorized unless session.include? :user_id
+    return render json: {error: "User session has been terminated. Please refresh page."}, status: :unauthorized unless session.include? :user_id
   end
 end

@@ -1,5 +1,5 @@
 import HotelPage from "./HotelPage";
-import Review from "./Review";
+import ReviewPost from "./ReviewPost";
 import { useContext } from "react";
 import { CurrentHotelContext } from "./App";
 
@@ -17,7 +17,7 @@ function Hotel({name, address, reviewTotal, id, hotel}) {
         <h2>{address}</h2>
         <h3>{reviewTotal ? reviewTotal : '0'} Reviews</h3>
         <button onClick={handleShowHotel} >Show Reviews</button>
-        <Review hotel_id={id}/>
+        <ReviewPost hotel_id={id}/>
       </div>  
     );
 }

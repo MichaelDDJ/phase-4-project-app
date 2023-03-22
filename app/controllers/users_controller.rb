@@ -45,8 +45,4 @@ class UsersController < ApplicationController
     def user_params
         params.permit(:first_name, :last_name, :password, :email)
     end
-
-    def render_create_user_errors
-        render json: {error: "Cannot leave fields blank."}, status: :unprocessable_entity
-    end
 end

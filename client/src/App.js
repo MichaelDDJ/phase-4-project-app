@@ -40,9 +40,11 @@ function App() {
     .then(hotels => setHotels(hotels))
   },[])
 
-
+  console.log(hotels)
+  console.log(currentUser)
   if (!currentUser) return <AuthPage setCurrentUser={setCurrentUser} />
   if (currentHotel) return <HotelPage currentHotel={currentHotel} setCurrentHotel={setCurrentHotel} />
+  console.log("Made it past")
   return (
             <UserContext.Provider value={[currentUser,setCurrentUser]}>
               <HotelContext.Provider value={[hotels, setHotels]}>
@@ -58,7 +60,7 @@ function App() {
                       <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/Profile" element={<Profile />} />
-                        <Route path="/Reviews" element={<Reviews />} />
+                        <Route path="/Reviews" element={<Reviews reviews={currentUser.reviews}/>} />
                       </Routes>
                   </div>
                   </CurrentHotelContext.Provider>

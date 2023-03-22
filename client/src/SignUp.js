@@ -26,7 +26,7 @@ function SignUp({setCurrentUser}) {
             if(res.ok){
                 res.json().then(user => setCurrentUser(user))
             }else{
-                res.json().then(error => setErrors(error))
+                res.json().then(error => setErrors(error.error))
             }
         })
 
@@ -34,11 +34,14 @@ function SignUp({setCurrentUser}) {
         document.getElementById("SignUp").reset();
     }
 
+    const displayedErrors = errors.map((error) => {
+        return <p key={error} className="error">{error}</p>
+    })
     
     return (
         <div>
             <h1>Sign Up Page</h1>
-            {errors == []? <></> : <p className="error">{errors[Object.keys(errors)[0]]}</p>}
+            {displayedErrors}
             <form id="SignUp" onSubmit={handleSubmit}>
                 <input type="text" placeholder="First Name" onChange={(event) => setFirstName(event.target.value)} value={first_name}/>
                 <input type="text" placeholder="Last Name" onChange={(event) => setLastName(event.target.value)} value={last_name}/>

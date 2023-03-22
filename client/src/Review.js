@@ -1,68 +1,32 @@
-import React, {useState, useEffect} from "react"
-import { useContext } from "react"
-import { UserContext, HotelContext } from "./App"
+import { useContext, useState } from "react";
+import { UserContext } from "./App";
 
-function Review({hotel_id}) {
+function Review ({hotelName, review, id}) {
 
-    const [review, setReview] = useState("")
     const [currentUser, setCurrentUser] = useContext(UserContext)
-    const [hotels, setHotels] = useContext(HotelContext)
-    const [errors, setErrors] = useState([])
+
     
-
-    function handleReviewChange(event) {
-        setReview(event.target.value)
-    }
-
-    function AddReview (review) {
-        const newReviews = [...currentUser.reviews, review]
-        currentUser.reviews = newReviews
-        setCurrentUser(currentUser)
-
-        const newHotels = hotels.map((hotel => {
-            if (hotel.id == hotel_id){
-                const newReviews = [...hotel.reviews, review]
-                hotel.reviews = newReviews
-                return hotel
-            }else{
-                return hotel
+    function handleDelete() {
+        fetch(`/reviews/${id}`, {method: 'DELETE'})
+        .then((r) => {
+            if (r.ok) {
+                r.json().then((oldReview) => {
+                    const newReviews = currentUser.reviews.filter((reviewToBeFiltered) => reviewToBeFiltered.id != oldReview.id)
+                    currentUser.reviews = newReviews
+                    setCurrentUser(currentUser)
+                    
+                })
             }
-        }))
-        setHotels(newHotels)
+        });
     }
 
-
-    function handleSubmit(e) {
-
-
-        e.preventDefault()
-        const content = {
-            review,
-            hotel_id
-        }
-        fetch('/reviews',{
-            method: 'POST',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify(content)
-        })
-        .then(r => {
-        if(r.ok) {
-            alert("Review sent")
-            setReview("")
-            r.json().then(review => AddReview(review))
-        }else{
-            r.json().then(data => setErrors(data))
-        }})
-    }
-    
     return (
-        <>
-        {errors == [] ? <></> : <p className="error">{errors.error}</p>}
-        <form onSubmit={handleSubmit} className="review" id={hotel_id} >
-            <input type="text" placeholder="Review" onChange={handleReviewChange} value={review}/>
-            <button>Post</button>
-        </form>
-        </>
+        <div className="review">
+            <h2>Review for {hotelName}</h2>
+            <button onClick={handleDelete} >Delete</button>
+            <button>Edit</button>
+            <p className="reviewPost">{review}</p>
+        </div>
     )
 }
 

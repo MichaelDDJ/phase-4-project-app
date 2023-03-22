@@ -1,23 +1,17 @@
 import { UserContext } from "./App";
-import { useContext, useEffect } from "react";
+import { useContext} from "react";
+import Review from "./Review";
 
-function Reviews() { 
+function Reviews({reviews}) { 
 
-    const [currentUser, setCurrentUser] = useContext(UserContext)
+    
+    
 
-    if(!currentUser.reviews){
-        currentUser.reviews = []
-    }
-    console.log(currentUser.reviews)
+    if(reviews.length > 0){
 
-    if(currentUser.reviews.length > 0){
-
-        const displayedReviews = currentUser.reviews.map((review) => {
+        const displayedReviews = reviews.map((review) => {
             return (
-            <div className="review" key={review.id}>
-                <h2>Review for {review.hotel.name}</h2>
-                <h3>{review.review}</h3>
-            </div>
+                <Review key={review.id} id={review.id} hotelName={review.hotel.name} review={review.review} />
             )
         })
 
@@ -30,9 +24,8 @@ function Reviews() {
 
     }else{
         return <h1>Need to make some reviews!</h1>
-    } 
-
-    
+    }
+ 
 }
 
 export default Reviews;

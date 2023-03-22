@@ -44,9 +44,14 @@ function HotelForm () {
         })
     }
 
+
+    const displayedErrors = errors.map((error) => {
+        return <p key={error} className="error">{error}</p>
+    })
+
     return (
         <>
-        {errors == [] ? <></> : <p className="error">{Object.keys(errors)[0]} {errors[Object.keys(errors)[0]]}</p>}
+        {displayedErrors}
         <form onSubmit={handleHotelSubmit}>
             <input type="text" placeholder="Hotel" onChange={handleHotelChange} value={name}/>
             <input type="text" placeholder="Address" onChange={handleAddressChange} value={address}/>
