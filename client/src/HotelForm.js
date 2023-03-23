@@ -1,12 +1,10 @@
 import { useState, useContext } from "react"
-import { HotelContext } from "./App"
 
 
-function HotelForm () {
+function HotelForm ({hotels, setHotels}) {
 
     const [name, setHotelName] = useState("")
     const [address, setHotelAddress] = useState("")
-    const [hotels, setHotels] = useContext(HotelContext)
     const [errors, setErrors] = useState([])
 
     function handleHotelChange (event) {

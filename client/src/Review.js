@@ -1,9 +1,15 @@
 import { useContext, useState } from "react";
-import { UserContext } from "./App";
+import { UserContext, CurrentReviewContext } from "./App";
 
-function Review ({hotelName, review, id}) {
 
+function Review ({hotelName, reviewText, review, id}) {
+
+    const [currentReview, setCurrentReview] = useContext(CurrentReviewContext)
     const [currentUser, setCurrentUser] = useContext(UserContext)
+
+    function handleSetReview () {
+        setCurrentReview(review)
+    }
 
     
     function handleDelete() {
@@ -11,21 +17,23 @@ function Review ({hotelName, review, id}) {
         .then((r) => {
             if (r.ok) {
                 r.json().then((oldReview) => {
-                    const newReviews = currentUser.reviews.filter((reviewToBeFiltered) => reviewToBeFiltered.id != oldReview.id)
-                    currentUser.reviews = newReviews
-                    setCurrentUser(currentUser)
-                    
+                    console.log(oldReview)
+                    const newUser = currentUser
+                    newUser.reviews = newUser.reviews.filter((reviewToBeFiltered) => reviewToBeFiltered.id != oldReview.id)
+                    setCurrentUser(newUser)
+                    console.log(currentUser)
                 })
             }
         });
     }
 
+    console.log("hello")
+
     return (
         <div className="review">
             <h2>Review for {hotelName}</h2>
             <button onClick={handleDelete} >Delete</button>
-            <button>Edit</button>
-            <p className="reviewPost">{review}</p>
+            <p className="reviewPost">{reviewText}</p>
         </div>
     )
 }

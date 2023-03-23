@@ -1,12 +1,11 @@
 import React, {useState, useEffect} from "react"
 import { useContext } from "react"
-import { UserContext, HotelContext } from "./App"
+import { UserContext} from "./App"
 
-function ReviewPost({hotel_id}) {
+function ReviewPost({hotel_id, hotels, setHotels}) {
 
     const [review, setReview] = useState("")
     const [currentUser, setCurrentUser] = useContext(UserContext)
-    const [hotels, setHotels] = useContext(HotelContext)
     const [errors, setErrors] = useState([])
     
 

@@ -4,6 +4,7 @@ import { UserContext, ErrorsContext } from "./App";
 
 function Profile() {
 
+    console.log("Profile")
   const [first_name, setFirstName] = useState("")
   const [last_name, setLastName] = useState("")
   const [email, setEmail] = useState("")
@@ -57,7 +58,6 @@ function Profile() {
 
     }
 
-    console.log(errors)
     if(currentUser) {
         return (
             <div>
