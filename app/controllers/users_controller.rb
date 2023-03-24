@@ -6,7 +6,12 @@ class UsersController < ApplicationController
     skip_before_action :authorized, only: [:create, :show, :destroy]
     def create
         user = User.create!(user_params)
-        render json: user, status: :ok
+        if user&.authenticate(params[:password])
+            session[:user_id] = user.id
+            render json: user, include: :reviews, status: :created
+        else
+            render json: {error: "Something went wrong. Please try again"}, status: :unauthorized
+        end
     end
 
     def show

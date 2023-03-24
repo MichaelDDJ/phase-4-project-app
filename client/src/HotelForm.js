@@ -35,7 +35,11 @@ function HotelForm ({hotels, setHotels}) {
         })
         .then(res => {
             if(res.ok){
-                res.json().then(hotel => AddHotel(hotel))
+                res.json().then(hotel => {
+                    AddHotel(hotel)
+                    setHotelName("")
+                    setHotelAddress("")
+                })
             }else{
                 res.json().then(error => setErrors(error.error))
             }

@@ -42,12 +42,12 @@ function App() {
     .then(r => r.json())
     .then(hotels => setHotels(hotels))
 },[])
-  
-
+  console.log(hotels)
+  console.log(currentUser)
   if (!currentUser) return <AuthPage setCurrentUser={setCurrentUser} />
   if (currentHotel) return <HotelPage currentHotel={currentHotel} setCurrentHotel={setCurrentHotel} />
   if (currentReview) return <ReviewEdit setCurrentUser={setCurrentUser} currentUser={currentUser} currentReview={currentReview} setCurrentReview={setCurrentReview} />
-  console.log(currentUser)
+  
   return (
             <UserContext.Provider value={[currentUser,setCurrentUser]}>
               <HotelContext.Provider value={[hotels, setHotels]}>

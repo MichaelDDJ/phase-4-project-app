@@ -6,13 +6,13 @@ import HotelForm from "./HotelForm";
 function Home() {
 
     
+    const [hotels, setHotels] = useContext(HotelContext)
 
     
-    const [hotels, setHotels] = useContext(HotelContext)
 
     const displayedHotels = hotels.map((hotel) => {
         
-        return <Hotel key={hotel.id} id={hotel.id} name={hotel.name} address={hotel.address} reviewTotal={hotel.reviews.length} hotel={hotel} hotels={hotels} setHotels={setHotels}/>
+        return <Hotel key={hotel.id} id={hotel.id} name={hotel.name} address={hotel.address} reviewTotal={hotel.reviews.length} hotel={hotel} hotels={hotels} setHotels={setHotels} />
     })
 
     return (
