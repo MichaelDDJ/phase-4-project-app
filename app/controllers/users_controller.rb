@@ -11,7 +11,7 @@ class UsersController < ApplicationController
 
     def show
         user = User.find(session[:user_id])
-        render json: user, include: ['reviews','reviews.hotel']
+        render json: user, include: ['reviews','reviews.hotel'], status: :ok
     end
 
     def update

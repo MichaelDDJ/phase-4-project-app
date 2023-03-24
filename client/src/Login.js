@@ -36,6 +36,8 @@ function Login({setCurrentUser}) {
                 res.json().then(error => setErrors(error))
             }
         })
+        setEmail("")
+        setPassword("")
     }
 
     return (

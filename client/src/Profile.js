@@ -4,24 +4,28 @@ import { UserContext, ErrorsContext } from "./App";
 
 function Profile() {
 
-    console.log("Profile")
-  const [first_name, setFirstName] = useState("")
-  const [last_name, setLastName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+    
+  const [first, setFirstName] = useState("")
+  const [last, setLastName] = useState("")
   const [currentUser, setCurrentUser] = useContext(UserContext)
   const [errors, setErrors] = useState([])
 
 
     function handleSubmit(event) {
         event.preventDefault();
-        if(last_name == "") {
-            setLastName(currentUser.last_name)
-            console.log(last_name)
+
+        let last_name = ""
+        let first_name = ""
+
+        if(last == "") {
+            last_name = currentUser.last_name
+        }else{
+            last_name = last
         }
-        if(first_name == "") {
-            setFirstName(currentUser.first_name)
-            console.log(first_name)
+        if(first == "") {
+            first_name = currentUser.first_name
+        }else{
+            first_name = first
         }
         const newUser = {
             first_name,
@@ -39,6 +43,8 @@ function Profile() {
                 res.json().then(errors => setErrors(errors.error))
             }
         })
+        setFirstName("")
+        setLastName("")
     }
 
     function handleLogout () {
@@ -66,8 +72,8 @@ function Profile() {
                 <h2>First Name: {currentUser.first_name}</h2>
                 <h2>Last Name: {currentUser.last_name}</h2>
                 <form id="Profile" onSubmit={handleSubmit}>
-                    <input type="text" placeholder="First Name" onChange={(event) => setFirstName(event.target.value)} value={first_name}/>
-                    <input type="text" placeholder="Last Name" onChange={(event) => setLastName(event.target.value)} value={last_name}/>
+                    <input type="text" placeholder="First Name" onChange={(event) => setFirstName(event.target.value)} value={first}/>
+                    <input type="text" placeholder="Last Name" onChange={(event) => setLastName(event.target.value)} value={last}/>
                     <button>Apply Changes</button>    
                 </form>
                 <button onClick={handleLogout}>Logout</button>

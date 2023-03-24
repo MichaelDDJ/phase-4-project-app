@@ -1,6 +1,6 @@
 import './App.css';
 import React, {useEffect, useState, createContext} from 'react';
-import { Routes, Route, NavLink} from 'react-router-dom';
+import { Routes, Route, NavLink, useNavigate} from 'react-router-dom';
 import Home from './Home';
 import Reviews from './Reviews';
 import Profile from './Profile';
@@ -12,31 +12,36 @@ export const UserContext = createContext();
 export const ErrorsContext = createContext();
 export const CurrentHotelContext = createContext();
 export const CurrentReviewContext = createContext();
+export const HotelContext = createContext();
 
 function App() {
   const [currentUser, setCurrentUser] = useState("")
   const [errors, setErrors] = useState([])
+  const [hotels, setHotels] = useState([])
   const [currentHotel, setCurrentHotel] = useState("")
   const [currentReview, setCurrentReview] = useState("")
-  
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetch('/auth')
     .then(r => {
       if(r.ok) {
-        r.json().then(user => setCurrentUser(user))
+        r.json().then(user => {
+          setCurrentUser(user)
+          navigate("/")
+        })
+        
       }else {
         r.json().then((errorMessage) => setErrors(errorMessage))
       }
     })
   },[])
 
-  function handleRender() {
-    const newUser = currentUser
-    setCurrentUser(newUser)
-    console.log("render")
-}
-
+  useEffect(() => {
+    fetch('/hotels')
+    .then(r => r.json())
+    .then(hotels => setHotels(hotels))
+},[])
   
 
   if (!currentUser) return <AuthPage setCurrentUser={setCurrentUser} />
@@ -45,6 +50,7 @@ function App() {
   console.log(currentUser)
   return (
             <UserContext.Provider value={[currentUser,setCurrentUser]}>
+              <HotelContext.Provider value={[hotels, setHotels]}>
                 <ErrorsContext.Provider value={[errors, setErrors]}>
                   <CurrentHotelContext.Provider value={[currentHotel, setCurrentHotel]}>
                     <CurrentReviewContext.Provider value={[currentReview, setCurrentReview]}>
@@ -52,18 +58,19 @@ function App() {
                           <nav className='nav'>
                             <h1>Hotel Reviews, Hi {currentUser.first_name}</h1>
                             <NavLink to="/">Home</NavLink>
-                            <NavLink to="Profile">My Profile</NavLink>
-                            <NavLink to="Reviews">My Reviews</NavLink>
+                            <NavLink to="/profile">My Profile</NavLink>
+                            <NavLink to="/reviews">My Reviews</NavLink>
                           </nav>
                           <Routes>
                             <Route path="/" element={<Home />} />
-                            <Route path="/Profile" element={<Profile />} />
-                            <Route path="/Reviews" element={<Reviews reviews={currentUser.reviews} handleRender={handleRender}/>} />
+                            <Route path="/profile" element={<Profile />} />
+                            <Route path="/reviews" element={<Reviews />} />
                           </Routes>
                       </div>
                     </CurrentReviewContext.Provider>
                   </CurrentHotelContext.Provider>
                 </ErrorsContext.Provider>
+              </HotelContext.Provider>
             </UserContext.Provider>    
   );
 }

@@ -1,31 +1,52 @@
+import { useContext, useEffect, useState } from "react"
 
 
 function ReviewEdit ({currentUser, setCurrentUser, currentReview, setCurrentReview}) {
 
-    function handleRemoveReview(oldReview) {
-        console.log(oldReview)
-        const newUser = currentUser
-        newUser.reviews = newUser.reviews.filter((reviewToBeFiltered) => reviewToBeFiltered.id != oldReview.id)
-        setCurrentUser(newUser)
-        setCurrentReview("")
-    }
+    const [review, setReview] = useState("")
     
-    function handleDelete() {
-        fetch(`/reviews/${currentReview.id}`, {method: 'DELETE'})
-        .then((r) => {
-            if (r.ok) {
-                r.json().then((oldReview) => handleRemoveReview(oldReview))
-            }
-        });
+    useEffect(() => {
+        setReview(currentReview.review)
+    },[])
+    
+    function handleReviewChange(event) {
+        setReview(event.target.value)
+    }
+
+    function handleSubmit(e) {
+        e.preventDefault()
+        
+        fetch(`/reviews/${currentReview.id}`, {
+            method: 'PATCH',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({review: review})
+        })
+        .then(r => r.json())
+        .then(review => {
+            console.log(currentUser)
+            const newUser = {...currentUser}
+            const newReviews = newUser.reviews.map((reviewToBeFiltered) => {
+                if (reviewToBeFiltered.id === review.id) {
+                    return review
+                }else {
+                    return reviewToBeFiltered
+                }
+            })
+
+            newUser.reviews = newReviews
+            setCurrentUser(newUser)
+        })
+        
+        setCurrentReview("")
+
     }
 
     return(
-        <div>
+        <form onSubmit={handleSubmit} >
             <h1>Review for {currentReview.hotel.name}</h1>
-            <button onClick={handleDelete}>Delete</button>
-            <button>Edit</button>
-            <p>{currentReview.review}</p>
-        </div>
+            <button>Submit Edit</button>
+            <textarea onChange={handleReviewChange} value={review}/>
+        </form>
     )
 }
 

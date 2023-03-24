@@ -1,17 +1,14 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, { useContext, useEffect, useState} from "react";
+import { HotelContext } from "./App";
 import Hotel from "./Hotel";
 import HotelForm from "./HotelForm";
 
 function Home() {
 
-    useEffect(() => {
-        fetch('/hotels')
-        .then(r => r.json())
-        .then(hotels => setHotels(hotels))
-      },[])
+    
 
-    console.log("Hotel")
-    const [hotels, setHotels] = useState([])
+    
+    const [hotels, setHotels] = useContext(HotelContext)
 
     const displayedHotels = hotels.map((hotel) => {
         

@@ -1,4 +1,3 @@
-import HotelPage from "./HotelPage";
 import ReviewPost from "./ReviewPost";
 import { useContext } from "react";
 import { CurrentHotelContext } from "./App";

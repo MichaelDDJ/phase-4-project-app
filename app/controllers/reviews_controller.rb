@@ -25,6 +25,16 @@ class ReviewsController < ApplicationController
         end
     end
 
+    def update
+        review = Review.find_by(id: params[:id])
+        if review
+            review.update!(review: params[:review]) 
+            render json: review, execpt: :user, status: :ok
+        else
+            render json: { error: "Review not found" }, status: :not_found
+        end
+    end
+
     private
 
     def review_params

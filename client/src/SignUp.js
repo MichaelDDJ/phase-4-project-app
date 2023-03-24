@@ -30,8 +30,11 @@ function SignUp({setCurrentUser}) {
             }
         })
 
-
-        document.getElementById("SignUp").reset();
+        setFirstName("")
+        setLastName("")
+        setEmail("")
+        setPassword("")
+        
     }
 
     const displayedErrors = errors.map((error) => {

@@ -2,26 +2,24 @@ import { UserContext } from "./App";
 import { useContext} from "react";
 import Review from "./Review";
 
-function Reviews({reviews, handleRender}) { 
-
-    console.log("sup")
-
-    const [currentUser, setCurrentUser] = useContext(UserContext)
+function Reviews() { 
 
     
 
-    if(reviews.length > 0){
+    const [currentUser, setCurrentUser] = useContext(UserContext)
 
-        const displayedReviews = reviews.map((review) => {
+
+    if(currentUser.reviews.length > 0){
+
+        const displayedReviews = currentUser.reviews.map((review) => {
             return (
-                <Review key={review.id} id={review.id} hotelName={review.hotel.name} reviewText={review.review} review={review} />
+                <Review key={review.id} id={review.id} hotel={review.hotel} reviewText={review.review} review={review} />
             )
         })
 
         return (
             <div className="reviews">
                 <h1>Reviews Page</h1>
-                <button onClick={handleRender}>Re-Render</button>
                 {displayedReviews}
             </div>
         )
