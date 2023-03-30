@@ -1,5 +1,6 @@
 class ReviewSerializer < ActiveModel::Serializer
-  attributes :id, :user_id, :hotel_id, :review
+  attributes :id, :review
   belongs_to :user
   belongs_to :hotel
+
 end

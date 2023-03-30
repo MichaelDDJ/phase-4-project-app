@@ -15,7 +15,7 @@ export const CurrentReviewContext = createContext();
 export const HotelContext = createContext();
 
 function App() {
-  const [currentUser, setCurrentUser] = useState("")
+  const [currentUser, setCurrentUser] = useState()
   const [errors, setErrors] = useState([])
   const [hotels, setHotels] = useState([])
   const [currentHotel, setCurrentHotel] = useState("")
@@ -42,6 +42,7 @@ function App() {
     .then(r => r.json())
     .then(hotels => setHotels(hotels))
 },[])
+
   console.log(hotels)
   console.log(currentUser)
   if (!currentUser) return <AuthPage setCurrentUser={setCurrentUser} />
