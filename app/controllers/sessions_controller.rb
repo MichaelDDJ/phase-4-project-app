@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
             session.delete :user_id
             render json: {response: "Logged out"}, status: :ok
         else
-            render json: {errors: ["Not authorized"]}, status: :unauthorized
+            render json: {errors: ["Already logged out"]}, status: :unauthorized
         end
     end
 end

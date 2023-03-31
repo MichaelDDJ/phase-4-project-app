@@ -13,7 +13,7 @@ function Review ({hotel, reviewText, id, review}) {
         .then((r) => {
             if (r.ok) {
                 r.json().then((oldReview) => {
-                    console.log(oldReview)
+    
                     const newUser = {...currentUser}
                     newUser.reviews = newUser.reviews.filter((reviewToBeFiltered) => reviewToBeFiltered.id != oldReview.id)
                     setCurrentUser(newUser)

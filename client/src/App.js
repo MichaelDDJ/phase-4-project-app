@@ -43,8 +43,10 @@ function App() {
     .then(hotels => setHotels(hotels))
 },[])
 
-  console.log(hotels)
+  //use filter
+  //fix fields
   console.log(currentUser)
+  console.log(hotels)
   if (!currentUser) return <AuthPage setCurrentUser={setCurrentUser} />
   if (currentHotel) return <HotelPage currentHotel={currentHotel} setCurrentHotel={setCurrentHotel} />
   if (currentReview) return <ReviewEdit setCurrentUser={setCurrentUser} currentUser={currentUser} currentReview={currentReview} setCurrentReview={setCurrentReview} />

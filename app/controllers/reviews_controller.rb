@@ -17,7 +17,7 @@ class ReviewsController < ApplicationController
     
     def destroy
         review = Review.find_by(id: params[:id])
-        if review
+        if (review && review.user_id == session[:user_id])
             review.destroy
             render json: review, status: :ok
         else
@@ -27,7 +27,7 @@ class ReviewsController < ApplicationController
 
     def update
         review = Review.find_by(id: params[:id])
-        if review
+        if (review && review.user_id == session[:user_id])
             review.update!(review: params[:review]) 
             render json: review, execpt: :user, status: :ok
         else
