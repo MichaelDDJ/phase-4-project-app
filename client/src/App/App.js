@@ -1,18 +1,14 @@
 import './App.css';
 import React, {useEffect, useState, createContext} from 'react';
 import { Routes, Route, NavLink, useNavigate} from 'react-router-dom';
-import Home from './Home';
-import Reviews from './Reviews';
-import Profile from './Profile';
+import Home from '../Home Route/Home';
+import Reviews from '../My Reviews/Reviews';
+import Profile from '../Profile Route/Profile';
 import AuthPage from './AuthPage';
 import HotelPage from './HotelPage';
 import ReviewEdit from './ReviewEdit';
-
-export const UserContext = createContext();
-export const ErrorsContext = createContext();
-export const CurrentHotelContext = createContext();
-export const CurrentReviewContext = createContext();
-export const HotelContext = createContext();
+import NavBar from './NavBar';
+import {UserContext, HotelContext, ErrorsContext, CurrentHotelContext, CurrentReviewContext} from '../Context/Context'
 
 function App() {
   const [currentUser, setCurrentUser] = useState()
@@ -58,12 +54,7 @@ function App() {
                   <CurrentHotelContext.Provider value={[currentHotel, setCurrentHotel]}>
                     <CurrentReviewContext.Provider value={[currentReview, setCurrentReview]}>
                       <div className="App">
-                          <nav className='nav'>
-                            <h1>Hotel Reviews, Hi {currentUser.first_name}</h1>
-                            <NavLink to="/">Home</NavLink>
-                            <NavLink to="/profile">My Profile</NavLink>
-                            <NavLink to="/reviews">My Reviews</NavLink>
-                          </nav>
+                          <NavBar />
                           <Routes>
                             <Route path="/" element={<Home />} />
                             <Route path="/profile" element={<Profile />} />

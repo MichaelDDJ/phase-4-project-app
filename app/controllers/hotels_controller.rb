@@ -1,5 +1,6 @@
 class HotelsController < ApplicationController
     rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity
+    rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
     skip_before_action :authorized, only: [:index]
     def index
         hotels = Hotel.all
@@ -21,6 +22,12 @@ class HotelsController < ApplicationController
         end
     end
 
+    def reviewed_hotels
+        user = User.find(session[:user_id])
+        hotels = user.hotels.uniq
+        render json: hotels, include: ['reviews', 'reviews.user.first_name'], status: :ok
+    end
+
     private
 
     def hotel_params
@@ -29,5 +36,9 @@ class HotelsController < ApplicationController
 
     def render_unprocessable_entity(invalid)
         render json:{error: invalid.record.errors.full_messages}, status: :unprocessable_entity
+    end
+
+    def render_not_found
+        render json: {error: "Couldn't verify User."}, status: :not_found
     end
 end

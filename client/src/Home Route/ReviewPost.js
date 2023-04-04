@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react"
 import { useContext } from "react"
-import { UserContext} from "./App"
+import { UserContext} from "../Context/Context"
 
 function ReviewPost({hotel_id, hotels, setHotels}) {
 
@@ -14,6 +14,7 @@ function ReviewPost({hotel_id, hotels, setHotels}) {
     }
 
     function AddReview (review) {
+        console.log(review)
         const newReviews = [...currentUser.reviews, review]
         currentUser.reviews = newReviews
         setCurrentUser(currentUser)

@@ -1,12 +1,12 @@
-import { UserContext } from "./App";
-import { useContext} from "react";
+import { UserContext } from "../Context/Context";
+import { useContext, useEffect, useState} from "react";
 import Review from "./Review";
 
 function Reviews() { 
 
     
-
     const [currentUser, setCurrentUser] = useContext(UserContext)
+    const [ userHotels, setUserHotels ] = useState([])
 
     
 

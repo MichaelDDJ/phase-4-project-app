@@ -1,6 +1,6 @@
 import ReviewPost from "./ReviewPost";
 import { useContext } from "react";
-import { CurrentHotelContext, UserContext } from "./App";
+import { CurrentHotelContext, UserContext } from "../Context/Context";
 
 function Hotel({name, address, reviewTotal, id, hotel, hotels, setHotels}) {
 

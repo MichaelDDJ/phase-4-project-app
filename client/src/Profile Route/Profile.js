@@ -1,5 +1,6 @@
-import React, {useContext, useState} from "react";
-import { UserContext, ErrorsContext } from "./App";
+import React, {useContext, useState, useEffect} from "react";
+import { UserContext, ErrorsContext, CurrentHotelContext } from "../Context/Context";
+import ReviewedHotel from "./ReviewedHotel";
 
 
 function Profile() {
@@ -9,6 +10,18 @@ function Profile() {
   const [last, setLastName] = useState("")
   const [currentUser, setCurrentUser] = useContext(UserContext)
   const [errors, setErrors] = useState([])
+  const [userHotels, setUserHotels] = useState([])
+  const [currentHotel, setCurrentHotel] = useContext(CurrentHotelContext)
+
+    useEffect(() => {
+    fetch('/reviewed_hotels')
+    .then(r => r.json())
+    .then((hotels) => setUserHotels(hotels))
+    },[])
+
+    const displayedHotels = userHotels.map((hotel) => {
+        return <ReviewedHotel key={hotel.id} hotel={hotel} setCurrentHotel={setCurrentHotel} />
+    })
 
 
     function handleSubmit(event) {
@@ -78,6 +91,8 @@ function Profile() {
                 </form>
                 <button onClick={handleLogout}>Logout</button>
             <button onClick={handleDelete}>Delete Profile</button>
+            <h1>Hotels Reviewed So Far</h1>
+            {displayedHotels}
             </div>
         );
     }else {

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { UserContext, CurrentReviewContext, HotelContext } from "./App";
+import { UserContext, CurrentReviewContext, HotelContext } from "../Context/Context";
 
 
 function Review ({hotel, reviewText, id, review}) {
@@ -21,8 +21,7 @@ function Review ({hotel, reviewText, id, review}) {
                     //get hotels
                     const newHotels = [...hotels]
                     //filter for correct hotel to change
-                    let newHotel = newHotels.filter((hotelToBeFiltered) => hotelToBeFiltered.id == hotel.id)
-                    newHotel = newHotel[0]
+                    let newHotel = newHotels.find((hotelToBeFiltered) => hotelToBeFiltered.id == hotel.id)
                     //filter out the oldReview
                     newHotel.reviews = newHotel.reviews.filter((reviewToBeFiltered) => reviewToBeFiltered.id != oldReview.id)
                     //place new hotel back into hotels

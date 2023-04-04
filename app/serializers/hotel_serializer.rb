@@ -3,4 +3,5 @@ class HotelSerializer < ActiveModel::Serializer
   has_many :reviews
   has_many :users, through: :reviews
 
+  
 end

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState} from "react";
-import { HotelContext } from "./App";
+import { HotelContext } from "../Context/Context";
 import Hotel from "./Hotel";
 import HotelForm from "./HotelForm";
 
